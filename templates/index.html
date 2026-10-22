@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}FixMyCampus | Improve your campus{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <div class="eyebrow"><span class="pulse-dot"></span> CAMPUS CARE, MADE SIMPLE</div>
+      <h1>A better campus<br><span>starts with you.</span></h1>
+      <p>Report campus issues, follow every update, and help your college become a safer, cleaner, better place to learn.</p>
+      <div class="d-flex flex-wrap gap-3 mt-4">
+        {% if session.get('user_id') %}
+          <a class="btn btn-primary btn-lg rounded-pill px-4" href="{{ url_for('new_complaint') }}"><i class="bi bi-plus-circle me-2"></i>Report an issue</a>
+          <a class="btn btn-outline-dark btn-lg rounded-pill px-4" href="{{ url_for('dashboard') }}">View dashboard</a>
+        {% else %}
+          <a class="btn btn-primary btn-lg rounded-pill px-4" href="{{ url_for('register') }}">Get started <i class="bi bi-arrow-right ms-2"></i></a>
+          <a class="btn btn-outline-dark btn-lg rounded-pill px-4" href="{{ url_for('login') }}">Sign in</a>
+        {% endif %}
+      </div>
+      <div class="hero-trust mt-4"><i class="bi bi-check-circle-fill"></i> Easy reporting <i class="bi bi-check-circle-fill ms-3"></i> Transparent tracking</div>
+    </div>
+    <div class="hero-art">
+      <div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div>
+      <div class="campus-card main-art-card">
+        <div class="art-top"><span class="art-label">CAMPUS STATUS</span><span class="status-live"><span></span> LIVE TRACKING</span></div>
+        <div class="art-building"><i class="bi bi-buildings-fill"></i></div>
+        <h5>Every issue matters.</h5><p>One report can make a difference.</p>
+        <div class="art-progress"><div><span>Issue resolution</span><b>{{ stats.resolved }} resolved</b></div><div class="progress"><div class="progress-bar" style="width: {{ (stats.resolved / stats.total * 100)|round|int if stats.total else 0 }}%"></div></div></div>
+      </div>
+      <div class="float-card float-check"><i class="bi bi-check2-circle"></i><div><b>Issue updated</b><small>Track progress easily</small></div></div>
+      <div class="float-card float-report"><i class="bi bi-megaphone"></i><div><b>Speak up</b><small>Your campus, your voice</small></div></div>
+    </div>
+  </div>
+</section>
+<section class="container stat-strip">
+  <div class="stat-card"><span class="stat-icon blue"><i class="bi bi-clipboard2-data"></i></span><div><small>Total reports</small><h3>{{ stats.total }}</h3></div></div>
+  <div class="stat-card"><span class="stat-icon green"><i class="bi bi-check2-circle"></i></span><div><small>Resolved issues</small><h3>{{ stats.resolved }}</h3></div></div>
+  <div class="stat-card"><span class="stat-icon orange"><i class="bi bi-hourglass-split"></i></span><div><small>Pending issues</small><h3>{{ stats.pending }}</h3></div></div>
+</section>
+<section class="container section-space">
+  <div class="section-heading"><div><div class="eyebrow">HOW IT WORKS</div><h2>Small steps. Real change.</h2><p>Keep campus problems visible and their progress accountable.</p></div></div>
+  <div class="row g-4 mt-1">
+    <div class="col-md-4"><div class="feature-card"><span class="feature-number">01</span><div class="feature-icon"><i class="bi bi-pencil-square"></i></div><h5>Report the issue</h5><p>Describe the problem, choose its location and category, and attach a photo if useful.</p></div></div>
+    <div class="col-md-4"><div class="feature-card"><span class="feature-number">02</span><div class="feature-icon purple"><i class="bi bi-kanban"></i></div><h5>Track progress</h5><p>Follow your ticket as it moves from submission through review and resolution.</p></div></div>
+    <div class="col-md-4"><div class="feature-card"><span class="feature-number">03</span><div class="feature-icon green"><i class="bi bi-buildings"></i></div><h5>Improve campus</h5><p>Staff and administrators can prioritize, assign, and resolve campus issues.</p></div></div>
+  </div>
+</section>
+<section class="container section-space">
+  <div class="section-heading"><div><div class="eyebrow">RECENT ACTIVITY</div><h2>Latest campus reports</h2></div>{% if session.get('user_id') %}<a href="{{ url_for('dashboard') }}" class="text-link">View all <i class="bi bi-arrow-right"></i></a>{% endif %}</div>
+  <div class="table-card">
+    {% if latest %}
+    <div class="table-responsive"><table class="table align-middle mb-0"><thead><tr><th>Issue</th><th>Category</th><th>Priority</th><th>Status</th><th>Reported</th></tr></thead><tbody>
+    {% for c in latest %}<tr><td><div class="fw-semibold">{{ c.title }}</div><small class="text-muted">Ticket #{{ c.id }}</small></td><td>{{ c.category }}</td><td><span class="priority priority-{{ c.priority|lower }}">{{ c.priority }}</span></td><td><span class="status status-{{ c.status|lower|replace(' ','-') }}">{{ c.status }}</span></td><td>{{ c.created_at.strftime('%d %b %Y') if c.created_at else '—' }}</td></tr>{% endfor %}
+    </tbody></table></div>
+    {% else %}<div class="empty-state"><i class="bi bi-inbox"></i><h5>No reports yet</h5><p>Be the first to report a campus issue.</p></div>{% endif %}
+  </div>
+</section>
+{% endblock %}

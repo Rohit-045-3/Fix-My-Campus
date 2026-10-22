@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Create account | FixMyCampus{% endblock %}
+{% block content %}
+<section class="auth-section"><div class="auth-card auth-card-wide"><div class="auth-symbol"><i class="bi bi-person-plus-fill"></i></div><div class="eyebrow text-center">JOIN YOUR CAMPUS</div><h1>Create your account</h1><p class="auth-subtitle">Make your voice part of a better campus.</p>
+<form method="post" class="mt-4">
+<div class="row g-3">
+<div class="col-md-6"><label class="form-label">Full name *</label><input class="form-control" name="name" required maxlength="100" value="{{ request.form.get('name','') }}"></div>
+<div class="col-md-6"><label class="form-label">Email address *</label><input class="form-control" type="email" name="email" required value="{{ request.form.get('email','') }}"></div>
+<div class="col-md-6"><label class="form-label">Department *</label><select class="form-select" name="department" required><option value="">Choose department</option>{% for d in ['CME / CSE','ECE','EEE','Mechanical','Civil','Other'] %}<option {{ 'selected' if request.form.get('department')==d else '' }}>{{ d }}</option>{% endfor %}</select></div>
+<div class="col-md-6"><label class="form-label">Student / staff ID</label><input class="form-control" name="student_id" maxlength="50" placeholder="Optional"></div>
+<div class="col-12"><label class="form-label">Password * (minimum 8 characters)</label><input class="form-control" type="password" name="password" required minlength="8" autocomplete="new-password"></div>
+</div>
+<button class="btn btn-primary btn-lg w-100 rounded-pill mt-4">Create account <i class="bi bi-arrow-right ms-2"></i></button>
+</form><p class="auth-bottom">Already registered? <a href="{{ url_for('login') }}">Sign in</a></p></div></section>
+{% endblock %}

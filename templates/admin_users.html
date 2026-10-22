@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Manage users | FixMyCampus{% endblock %}
+{% block content %}
+<section class="page-header"><div class="container"><div class="eyebrow">ADMINISTRATION</div><h1>Manage users</h1><p>Assign student, staff, and administrator roles.</p></div></section>
+<section class="container page-content"><div class="table-card"><div class="table-responsive"><table class="table align-middle mb-0"><thead><tr><th>Name</th><th>Email</th><th>Department</th><th>Role</th><th>Joined</th><th>Save role</th></tr></thead><tbody>{% for u in users %}<tr><td class="fw-semibold">{{ u.name }}</td><td>{{ u.email }}</td><td>{{ u.department }}</td><td><span class="role-pill">{{ u.role }}</span></td><td>{{ u.created_at.strftime('%d %b %Y') if u.created_at else '' }}</td><td><form method="post" class="d-flex gap-2"><input type="hidden" name="user_id" value="{{ u.id }}"><select name="role" class="form-select form-select-sm">{% for role in ['student','staff','admin'] %}<option {{ 'selected' if role==u.role else '' }}>{{ role }}</option>{% endfor %}</select><button class="btn btn-sm btn-primary">Save</button></form></td></tr>{% endfor %}</tbody></table></div></div></section>
+{% endblock %}
